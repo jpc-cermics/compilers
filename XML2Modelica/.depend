@@ -1,0 +1,27 @@
+src/linenum.cmo : src/linenum.cmi
+src/linenum.cmx : src/linenum.cmi
+src/stringLexer.cmo : src/stringParser.cmi src/stringLexer.cmi
+src/stringLexer.cmx : src/stringParser.cmx src/stringLexer.cmi
+src/stringParser.cmo : src/stringParser.cmi
+src/stringParser.cmx : src/stringParser.cmi
+src/modelicaCodeGenerator.cmo : src/xMLTree.cmi src/stringParser.cmi \
+    src/stringLexer.cmi src/modelicaCodeGenerator.cmi
+src/modelicaCodeGenerator.cmx : src/xMLTree.cmx src/stringParser.cmx \
+    src/stringLexer.cmx src/modelicaCodeGenerator.cmi
+src/xMLLexer.cmo : src/xMLParser.cmi src/xMLLexer.cmi
+src/xMLLexer.cmx : src/xMLParser.cmx src/xMLLexer.cmi
+src/xMLParser.cmo : src/xMLTree.cmi src/xMLParser.cmi
+src/xMLParser.cmx : src/xMLTree.cmx src/xMLParser.cmi
+src/xMLTree.cmo : src/xMLTree.cmi
+src/xMLTree.cmx : src/xMLTree.cmi
+src/xML2Modelica.cmo : src/xMLParser.cmi src/xMLLexer.cmi \
+    src/modelicaCodeGenerator.cmi src/linenum.cmi
+src/xML2Modelica.cmx : src/xMLParser.cmx src/xMLLexer.cmx \
+    src/modelicaCodeGenerator.cmx src/linenum.cmx
+src/modelicaCodeGenerator.cmi : src/xMLTree.cmi
+src/xMLTree.cmi :
+src/linenum.cmi :
+src/stringLexer.cmi : src/stringParser.cmi
+src/xMLLexer.cmi : src/xMLParser.cmi
+src/stringParser.cmi :
+src/xMLParser.cmi : src/xMLTree.cmi
