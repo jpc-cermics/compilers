@@ -37,13 +37,11 @@ bin/paksazi: bin/paksazi.byt bin/paksazi.bin
 
 bin/paksazi.byt: $(SRC_ML:.ml=.cmo)
 	@echo "Linking paksazi.byt" && \
-	$(OCAMLC) $(CAML_INCLUDES)  -a $(CAML_BYT_LIBS) \
-		-o $@ $(SRC_ML:.ml=.cmo)
+	$(OCAMLC) $(CAML_INCLUDES) -o $@ $(SRC_ML:.ml=.cmo)
 
 bin/paksazi.bin: $(SRC_ML:.ml=.cmx) 
 	@echo "Linking paksazi.bin" && \
-	$(OCAMLOPT) $(CAML_INCLUDES) -a $(CAML_BYT_LIBS:.cma=.cmxa) \
-		-o $@ $(SRC_ML:.ml=.cmx) 
+	$(OCAMLOPT) $(CAML_INCLUDES) -o $@ $(SRC_ML:.ml=.cmx) 
 
 cmi: $(SRC_MLI:.mli=.cmi) 
 cmo: $(SRC_ML:.ml=.cmo)
