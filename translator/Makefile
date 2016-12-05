@@ -102,8 +102,8 @@ SRC_TRANSLATION_MLI=\
 SRC_ML=\
 	$(SRC_PARSING_ML) \
 	$(SRC_COMPILATION_ML) \
-	$(SRC_EXCEPTIONHANDLING_ML) \
 	$(SRC_INSTANTIATION_ML) \
+	$(SRC_EXCEPTIONHANDLING_ML) \
 	$(SRC_TRANSLATION_ML) \
 
 SRC_ML_GENERATED_FILES=\
@@ -112,12 +112,14 @@ SRC_ML_GENERATED_FILES=\
 SRC_MLI=\
 	$(SRC_PARSING_MLI) \
 	$(SRC_COMPILATION_MLI) \
-	$(SRC_EXCEPTIONHANDLING_MLI) \
 	$(SRC_INSTANTIATION_MLI) \
+	$(SRC_EXCEPTIONHANDLING_MLI) \
 	$(SRC_TRANSLATION_MLI) \
 
 SRC_MLI_GENERATED_FILES=\
 	$(SRC_PARSING_MLI_GENERATED_FILES) \
+
+CAML_BYT_LIBS=nums.cma
 
 all:  generated cmi cmo cmx bin/translator
 
@@ -128,12 +130,12 @@ bin/translator: bin/translator.byt bin/translator.bin
 
 bin/translator.byt: $(SRC_ML:.ml=.cmo)
 	@echo "Linking translator.byt" && \
-	$(OCAMLC) $(CAML_INCLUDES)  -a $(CAML_BYT_LIBS) \
+	$(OCAMLC) $(CAML_INCLUDES) -a $(CAML_BYT_LIBS)  \
 		-o $@ $(SRC_ML:.ml=.cmo)
 
 bin/translator.bin: $(SRC_ML:.ml=.cmx) 
 	@echo "Linking translator.bin" && \
-	$(OCAMLOPT) $(CAML_INCLUDES) -a $(CAML_BYT_LIBS:.cma=.cmxa) \
+	$(OCAMLOPT) $(CAML_INCLUDES) $(CAML_BYT_LIBS:.cma=.cmxa) \
 		-o $@ $(SRC_ML:.ml=.cmx) 
 
 cmi: $(SRC_MLI:.mli=.cmi) 

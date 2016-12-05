@@ -60,13 +60,11 @@ bin/XML2Modelica: bin/XML2Modelica.byt bin/XML2Modelica.bin
 
 bin/XML2Modelica.byt: $(SRC_ML:.ml=.cmo)
 	@echo "Linking XML2Modelica.byt" && \
-	$(OCAMLC) $(CAML_INCLUDES)  -a $(CAML_BYT_LIBS) \
-		-o $@ $(SRC_ML:.ml=.cmo)
+	$(OCAMLC) $(CAML_INCLUDES)  -o $@ $(SRC_ML:.ml=.cmo)
 
 bin/XML2Modelica.bin: $(SRC_ML:.ml=.cmx) 
 	@echo "Linking XML2Modelica.bin" && \
-	$(OCAMLOPT) $(CAML_INCLUDES) -a $(CAML_BYT_LIBS:.cma=.cmxa) \
-		-o $@ $(SRC_ML:.ml=.cmx) 
+	$(OCAMLOPT) $(CAML_INCLUDES) -o $@ $(SRC_ML:.ml=.cmx) 
 
 cmi: $(SRC_MLI:.mli=.cmi) 
 cmo: $(SRC_ML:.ml=.cmo)

@@ -72,6 +72,8 @@ SRC_MLI=\
 SRC_MLI_GENERATED_FILES=\
 	src/parser.mli \
 
+CAML_BYT_LIBS=nums.cma
+
 all:  $(SRC_ML_GENERATED_FILES) cmi cmo cmx bin/modelicac
 
 bin/modelicac: bin/modelicac.byt bin/modelicac.bin 
@@ -84,7 +86,7 @@ bin/modelicac.byt: $(SRC_ML:.ml=.cmo)
 
 bin/modelicac.bin: $(SRC_ML:.ml=.cmx) 
 	@echo "Linking modelicac.bin" && \
-	$(OCAMLOPT) $(CAML_INCLUDES) -a $(CAML_BYT_LIBS:.cma=.cmxa) \
+	$(OCAMLOPT) $(CAML_INCLUDES) $(CAML_BYT_LIBS:.cma=.cmxa) \
 		-o $@ $(SRC_ML:.ml=.cmx) 
 
 cmi: $(SRC_MLI:.mli=.cmi) 
