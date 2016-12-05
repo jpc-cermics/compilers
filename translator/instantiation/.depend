@@ -1,0 +1,6 @@
+instantiation.cmi: ../compilation/types.cmi ../parsing/syntax.cmi \
+    ../compilation/nameResolve.cmi ../parsing/location.cmo
+instantiation.cmo: ../compilation/types.cmi ../parsing/syntax.cmi \
+    ../compilation/nameResolve.cmi ../parsing/location.cmo instantiation.cmi
+instantiation.cmx: ../compilation/types.cmx ../parsing/syntax.cmx \
+    ../compilation/nameResolve.cmx ../parsing/location.cmx instantiation.cmi

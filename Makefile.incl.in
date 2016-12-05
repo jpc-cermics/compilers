@@ -1,0 +1,56 @@
+#/* -*- Mode: Makefile -*- */
+# Compilation rules
+.SUFFIXES:
+.SUFFIXES: .cmx .cmxa .cmo .cmi .cma .ml .mli .mll .mly .mlin .mliin
+
+# generated with configure.in
+
+OCAMLC="@OCAMLC@"
+OCAMLOPT="@OCAMLOPT@"
+CAML_BYT_COMP_FLAGS=@CAML_BYT_COMP_FLAGS@
+CAML_BIN_COMP_FLAGS=@CAML_BIN_COMP_FLAGS@
+OCAMLLIB="@OCAMLLIB@"
+OCAMLLEX="@OCAMLLEX@"
+OCAMLYACC="@OCAMLYACC@"
+OCAMLDEP="@OCAMLDEP@"
+OCAMLDEP_FLAGS=@OCAMLDEP_FLAGS@
+OCAMLPRINTC="@OCAMLPRINTC@"
+OCAMLPRINTC_FLAGS=@OCAMLPRINTC_FLAGS@
+HTMLC_CONF_INCLUDES=@HTMLC_CONF_INCLUDES@
+HTMLC_CONF_ENV=@HTMLC_CONF_ENV@
+HTMLC_FLAGS=@HTMLC_FLAGS@
+HTMLC_COMMAND="@HTMLC_COMMAND@"
+
+OCAMLVERSION="@OCAMLVERSION@"
+OCAML_VERSION_MAJOR="@OCAML_VERSION_MAJOR@"
+OCAML_VERSION_MINOR="@OCAML_VERSION_MINOR@"
+
+# compilation rules
+
+.ml.cmo:
+	@echo "compiling (byte) $(DIR)$<" && \
+	$(OCAMLC) $(CAML_BYT_COMP_FLAGS) $(CAML_INCLUDES) -c $<
+
+.mli.cmi:
+	@echo "compiling $(DIR)$<" && \
+	$(OCAMLC) $(CAML_BYT_COMP_FLAGS)  $(CAML_INCLUDES) -c $<
+
+.ml.cmx:
+	@echo "compiling (bin) $(DIR)$<" && \
+	$(OCAMLOPT) $(CAML_BIN_COMP_FLAGS) $(CAML_INCLUDES) -c $<
+
+# lex and yacc rules
+
+.mll.ml:
+	@echo "compiling lexer $(DIR)$<" && \
+	$(OCAMLLEX) $<
+
+.mly.ml:
+	@echo "compiling parser $(DIR)$<" && \
+	$(OCAMLYACC) -v  $<
+
+.mly.mli:
+	@echo "compiling parser $(DIR)$<" && \
+	$(OCAMLYACC) -v  $<
+
+

@@ -1,0 +1,8 @@
+types.cmi:
+nameResolve.cmi: types.cmi ../parsing/syntax.cmi ../parsing/location.cmo
+types.cmo: types.cmi
+types.cmx: types.cmi
+nameResolve.cmo: types.cmi ../parsing/syntax.cmi ../parsing/location.cmo \
+    nameResolve.cmi
+nameResolve.cmx: types.cmx ../parsing/syntax.cmx ../parsing/location.cmx \
+    nameResolve.cmi

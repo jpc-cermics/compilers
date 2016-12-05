@@ -1,0 +1,10 @@
+## After changing, run
+##   svn propset svn:ignore -F .cvsignore -R .
+*.cm*
+*.o
+*.output
+*.exe
+*.bin
+*.byt
+*.annot
+versiondate.ml

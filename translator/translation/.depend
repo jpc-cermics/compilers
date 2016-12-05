@@ -1,0 +1,24 @@
+codeGeneration.cmi: ../compilation/types.cmi \
+    ../instantiation/instantiation.cmi ../exceptionHandling/errorDico.cmi
+libraryManager.cmi: ../parsing/syntax.cmi ../parsing/location.cmo
+versiondate.cmi:
+codeGeneration.cmo: ../compilation/types.cmi ../compilation/nameResolve.cmi \
+    ../instantiation/instantiation.cmi ../exceptionHandling/errorDico.cmi \
+    codeGeneration.cmi
+codeGeneration.cmx: ../compilation/types.cmx ../compilation/nameResolve.cmx \
+    ../instantiation/instantiation.cmx ../exceptionHandling/errorDico.cmx \
+    codeGeneration.cmi
+libraryManager.cmo: ../parsing/parse.cmo ../parsing/location.cmo \
+    ../parsing/lexer.cmo ../exceptionHandling/exceptHandler.cmi \
+    libraryManager.cmi
+libraryManager.cmx: ../parsing/parse.cmx ../parsing/location.cmx \
+    ../parsing/lexer.cmx ../exceptionHandling/exceptHandler.cmx \
+    libraryManager.cmi
+versiondate.cmo: versiondate.cmi
+versiondate.cmx: versiondate.cmi
+translator.cmo: versiondate.cmi ../compilation/nameResolve.cmi \
+    libraryManager.cmi ../instantiation/instantiation.cmi \
+    ../exceptionHandling/exceptHandler.cmi codeGeneration.cmi
+translator.cmx: versiondate.cmx ../compilation/nameResolve.cmx \
+    libraryManager.cmx ../instantiation/instantiation.cmx \
+    ../exceptionHandling/exceptHandler.cmx codeGeneration.cmx

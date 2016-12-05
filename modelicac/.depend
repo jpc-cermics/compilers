@@ -1,0 +1,72 @@
+src/parseTree.cmi :
+src/linenum.cmi :
+src/lexer.cmi : src/parser.cmi
+src/parser.cmi : src/parseTree.cmi
+src/precompilation.cmi : src/parseTree.cmi
+src/compilation.cmi : src/precompilation.cmi
+src/instantiation.cmi : src/compilation.cmi
+src/graphNodeSet.cmi :
+src/symbolicExpression.cmi :
+src/squareSparseMatrix.cmi :
+src/bipartiteGraph.cmi :
+src/hungarianMethod.cmi :
+src/causalityGraph.cmi :
+src/optimization.cmi : src/symbolicExpression.cmi src/instantiation.cmi \
+    src/compilation.cmi
+src/xMLCodeGeneration.cmi : src/optimization.cmi
+src/optimizingCompiler.cmi : src/optimization.cmi
+src/scicosCodeGeneration.cmi : src/optimization.cmi
+src/parseTree.cmo : src/parseTree.cmi
+src/parseTree.cmx : src/parseTree.cmi
+src/linenum.cmo : src/linenum.cmi
+src/linenum.cmx : src/linenum.cmi
+src/parser.cmo : src/parseTree.cmi src/parser.cmi
+src/parser.cmx : src/parseTree.cmx src/parser.cmi
+src/lexer.cmo : src/parser.cmi src/lexer.cmi
+src/lexer.cmx : src/parser.cmx src/lexer.cmi
+src/parse.cmo : src/parser.cmi src/linenum.cmi
+src/parse.cmx : src/parser.cmx src/linenum.cmx
+src/precompilation.cmo : src/parseTree.cmi src/precompilation.cmi
+src/precompilation.cmx : src/parseTree.cmx src/precompilation.cmi
+src/compilation.cmo : src/precompilation.cmi src/parseTree.cmi \
+    src/compilation.cmi
+src/compilation.cmx : src/precompilation.cmx src/parseTree.cmx \
+    src/compilation.cmi
+src/instantiation.cmo : src/compilation.cmi src/instantiation.cmi
+src/instantiation.cmx : src/compilation.cmx src/instantiation.cmi
+src/graphNodeSet.cmo : src/graphNodeSet.cmi
+src/graphNodeSet.cmx : src/graphNodeSet.cmi
+src/symbolicExpression.cmo : src/graphNodeSet.cmi src/symbolicExpression.cmi
+src/symbolicExpression.cmx : src/graphNodeSet.cmx src/symbolicExpression.cmi
+src/squareSparseMatrix.cmo : src/squareSparseMatrix.cmi
+src/squareSparseMatrix.cmx : src/squareSparseMatrix.cmi
+src/bipartiteGraph.cmo : src/bipartiteGraph.cmi
+src/bipartiteGraph.cmx : src/bipartiteGraph.cmi
+src/hungarianMethod.cmo : src/hungarianMethod.cmi
+src/hungarianMethod.cmx : src/hungarianMethod.cmi
+src/causalityGraph.cmo : src/causalityGraph.cmi
+src/causalityGraph.cmx : src/causalityGraph.cmi
+src/optimization.cmo : src/symbolicExpression.cmi src/squareSparseMatrix.cmi \
+    src/instantiation.cmi src/hungarianMethod.cmi src/compilation.cmi \
+    src/causalityGraph.cmi src/bipartiteGraph.cmi src/optimization.cmi
+src/optimization.cmx : src/symbolicExpression.cmx src/squareSparseMatrix.cmx \
+    src/instantiation.cmx src/hungarianMethod.cmx src/compilation.cmx \
+    src/causalityGraph.cmx src/bipartiteGraph.cmx src/optimization.cmi
+src/xMLCodeGeneration.cmo : src/symbolicExpression.cmi src/optimization.cmi \
+    src/xMLCodeGeneration.cmi
+src/xMLCodeGeneration.cmx : src/symbolicExpression.cmx src/optimization.cmx \
+    src/xMLCodeGeneration.cmi
+src/optimizingCompiler.cmo : src/xMLCodeGeneration.cmi \
+    src/precompilation.cmi src/parse.cmo src/optimization.cmi src/lexer.cmi \
+    src/instantiation.cmi src/compilation.cmi src/optimizingCompiler.cmi
+src/optimizingCompiler.cmx : src/xMLCodeGeneration.cmx \
+    src/precompilation.cmx src/parse.cmx src/optimization.cmx src/lexer.cmx \
+    src/instantiation.cmx src/compilation.cmx src/optimizingCompiler.cmi
+src/scicosCodeGeneration.cmo : src/symbolicExpression.cmi \
+    src/optimization.cmi src/instantiation.cmi src/scicosCodeGeneration.cmi
+src/scicosCodeGeneration.cmx : src/symbolicExpression.cmx \
+    src/optimization.cmx src/instantiation.cmx src/scicosCodeGeneration.cmi
+src/scicosOptimizingCompiler.cmo : src/scicosCodeGeneration.cmi \
+    src/optimizingCompiler.cmi
+src/scicosOptimizingCompiler.cmx : src/scicosCodeGeneration.cmx \
+    src/optimizingCompiler.cmx

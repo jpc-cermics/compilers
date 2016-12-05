@@ -1,0 +1,56 @@
+#/* -*- Mode: Makefile -*- */
+# Compilation rules
+.SUFFIXES:
+.SUFFIXES: .cmx .cmxa .cmo .cmi .cma .ml .mli .mll .mly .mlin .mliin
+
+# generated with configure.in
+
+OCAMLC="ocamlc"
+OCAMLOPT="ocamlopt"
+CAML_BYT_COMP_FLAGS=-strict-sequence -warn-error Ae -annot -g
+CAML_BIN_COMP_FLAGS=-strict-sequence -w Ae -unsafe -noassert -inline 10000
+OCAMLLIB="/usr/lib/ocaml"
+OCAMLLEX="ocamllex.opt"
+OCAMLYACC="ocamlyacc"
+OCAMLDEP="ocamldep"
+OCAMLDEP_FLAGS=-slash
+OCAMLPRINTC="ocamlprintc"
+OCAMLPRINTC_FLAGS=-c
+HTMLC_CONF_INCLUDES=
+HTMLC_CONF_ENV=
+HTMLC_FLAGS=-lang en -honor_line_continuation true
+HTMLC_COMMAND="htmlc"
+
+OCAMLVERSION="4.02.3"
+OCAML_VERSION_MAJOR="4"
+OCAML_VERSION_MINOR="02"
+
+# compilation rules
+
+.ml.cmo:
+	@echo "compiling (byte) $(DIR)$<" && \
+	$(OCAMLC) $(CAML_BYT_COMP_FLAGS) $(CAML_INCLUDES) -c $<
+
+.mli.cmi:
+	@echo "compiling $(DIR)$<" && \
+	$(OCAMLC) $(CAML_BYT_COMP_FLAGS)  $(CAML_INCLUDES) -c $<
+
+.ml.cmx:
+	@echo "compiling (bin) $(DIR)$<" && \
+	$(OCAMLOPT) $(CAML_BIN_COMP_FLAGS) $(CAML_INCLUDES) -c $<
+
+# lex and yacc rules
+
+.mll.ml:
+	@echo "compiling lexer $(DIR)$<" && \
+	$(OCAMLLEX) $<
+
+.mly.ml:
+	@echo "compiling parser $(DIR)$<" && \
+	$(OCAMLYACC) -v  $<
+
+.mly.mli:
+	@echo "compiling parser $(DIR)$<" && \
+	$(OCAMLYACC) -v  $<
+
+

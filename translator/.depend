@@ -1,0 +1,94 @@
+parsing/syntax.cmo : parsing/syntax.cmi
+parsing/syntax.cmx : parsing/syntax.cmi
+parsing/linenum.cmo : parsing/linenum.cmi
+parsing/linenum.cmx : parsing/linenum.cmi
+parsing/location.cmo : parsing/location.cmi
+parsing/location.cmx : parsing/location.cmi
+parsing/config.cmo : parsing/location.cmi parsing/config.cmi
+parsing/config.cmx : parsing/location.cmx parsing/config.cmi
+parsing/parse_error.cmo : parsing/location.cmi parsing/parse_error.cmi
+parsing/parse_error.cmx : parsing/location.cmx parsing/parse_error.cmi
+parsing/parser.cmo : parsing/syntax.cmi parsing/parse_error.cmi \
+    parsing/location.cmi parsing/config.cmi parsing/parser.cmi
+parsing/parser.cmx : parsing/syntax.cmx parsing/parse_error.cmx \
+    parsing/location.cmx parsing/config.cmx parsing/parser.cmi
+parsing/lexer.cmo : parsing/parser.cmi parsing/parse_error.cmi \
+    parsing/location.cmi parsing/config.cmi parsing/lexer.cmi
+parsing/lexer.cmx : parsing/parser.cmx parsing/parse_error.cmx \
+    parsing/location.cmx parsing/config.cmx parsing/lexer.cmi
+parsing/parse.cmo : parsing/parser.cmi parsing/parse_error.cmi \
+    parsing/location.cmi parsing/config.cmi parsing/parse.cmi
+parsing/parse.cmx : parsing/parser.cmx parsing/parse_error.cmx \
+    parsing/location.cmx parsing/config.cmx parsing/parse.cmi
+compilation/types.cmo : compilation/types.cmi
+compilation/types.cmx : compilation/types.cmi
+compilation/nameResolve.cmo : compilation/types.cmi parsing/syntax.cmi \
+    parsing/location.cmi compilation/nameResolve.cmi
+compilation/nameResolve.cmx : compilation/types.cmx parsing/syntax.cmx \
+    parsing/location.cmx compilation/nameResolve.cmi
+exceptionHandling/errorDico.cmo : parsing/parse_error.cmi \
+    compilation/nameResolve.cmi parsing/location.cmi \
+    instantiation/instantiation.cmi exceptionHandling/errorDico.cmi
+exceptionHandling/errorDico.cmx : parsing/parse_error.cmx \
+    compilation/nameResolve.cmx parsing/location.cmx \
+    instantiation/instantiation.cmx exceptionHandling/errorDico.cmi
+exceptionHandling/msgDico.cmo : exceptionHandling/msgDico.cmi
+exceptionHandling/msgDico.cmx : exceptionHandling/msgDico.cmi
+exceptionHandling/exceptHandler.cmo : parsing/parse_error.cmi \
+    compilation/nameResolve.cmi exceptionHandling/msgDico.cmi \
+    parsing/location.cmi parsing/linenum.cmi instantiation/instantiation.cmi \
+    exceptionHandling/errorDico.cmi exceptionHandling/exceptHandler.cmi
+exceptionHandling/exceptHandler.cmx : parsing/parse_error.cmx \
+    compilation/nameResolve.cmx exceptionHandling/msgDico.cmx \
+    parsing/location.cmx parsing/linenum.cmx instantiation/instantiation.cmx \
+    exceptionHandling/errorDico.cmx exceptionHandling/exceptHandler.cmi
+instantiation/instantiation.cmo : compilation/types.cmi parsing/syntax.cmi \
+    compilation/nameResolve.cmi parsing/location.cmi \
+    instantiation/instantiation.cmi
+instantiation/instantiation.cmx : compilation/types.cmx parsing/syntax.cmx \
+    compilation/nameResolve.cmx parsing/location.cmx \
+    instantiation/instantiation.cmi
+translation/codeGeneration.cmo : compilation/types.cmi \
+    compilation/nameResolve.cmi instantiation/instantiation.cmi \
+    exceptionHandling/errorDico.cmi translation/codeGeneration.cmi
+translation/codeGeneration.cmx : compilation/types.cmx \
+    compilation/nameResolve.cmx instantiation/instantiation.cmx \
+    exceptionHandling/errorDico.cmx translation/codeGeneration.cmi
+translation/libraryManager.cmo : parsing/parse.cmi parsing/location.cmi \
+    parsing/lexer.cmi exceptionHandling/exceptHandler.cmi \
+    translation/libraryManager.cmi
+translation/libraryManager.cmx : parsing/parse.cmx parsing/location.cmx \
+    parsing/lexer.cmx exceptionHandling/exceptHandler.cmx \
+    translation/libraryManager.cmi
+translation/versiondate.cmo : translation/versiondate.cmi
+translation/versiondate.cmx : translation/versiondate.cmi
+translation/translator.cmo : translation/versiondate.cmi \
+    compilation/nameResolve.cmi translation/libraryManager.cmi \
+    instantiation/instantiation.cmi exceptionHandling/exceptHandler.cmi \
+    translation/codeGeneration.cmi
+translation/translator.cmx : translation/versiondate.cmx \
+    compilation/nameResolve.cmx translation/libraryManager.cmx \
+    instantiation/instantiation.cmx exceptionHandling/exceptHandler.cmx \
+    translation/codeGeneration.cmx
+parsing/syntax.cmi :
+parsing/linenum.cmi :
+parsing/location.cmi :
+parsing/config.cmi : parsing/location.cmi
+parsing/parse_error.cmi : parsing/location.cmi
+parsing/parser.cmi : parsing/syntax.cmi parsing/location.cmi
+parsing/lexer.cmi : parsing/parser.cmi
+parsing/parse.cmi : parsing/syntax.cmi parsing/parser.cmi \
+    parsing/location.cmi
+compilation/types.cmi :
+compilation/nameResolve.cmi : compilation/types.cmi parsing/syntax.cmi \
+    parsing/location.cmi
+exceptionHandling/errorDico.cmi : parsing/location.cmi \
+    instantiation/instantiation.cmi
+exceptionHandling/msgDico.cmi :
+exceptionHandling/exceptHandler.cmi :
+instantiation/instantiation.cmi : compilation/types.cmi parsing/syntax.cmi \
+    compilation/nameResolve.cmi parsing/location.cmi
+translation/codeGeneration.cmi : compilation/types.cmi \
+    instantiation/instantiation.cmi
+translation/libraryManager.cmi : parsing/syntax.cmi parsing/location.cmi
+translation/versiondate.cmi :

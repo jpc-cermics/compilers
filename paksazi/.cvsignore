@@ -1,0 +1,10 @@
+paksazi
+paksazi.bin
+paksazi.byt
+paksazi.cmi
+paksazi.cmo
+paksazi.cmx
+*.annot
+*.output
+.depend
+

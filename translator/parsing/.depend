@@ -1,0 +1,17 @@
+parser.cmi: syntax.cmi location.cmo
+syntax.cmo: syntax.cmi
+syntax.cmx: syntax.cmi
+linenum.cmo:
+linenum.cmx:
+location.cmo:
+location.cmx:
+config.cmo: location.cmo
+config.cmx: location.cmx
+parse_error.cmo: location.cmo
+parse_error.cmx: location.cmx
+parser.cmo: syntax.cmi parse_error.cmo location.cmo config.cmo parser.cmi
+parser.cmx: syntax.cmx parse_error.cmx location.cmx config.cmx parser.cmi
+lexer.cmo: parser.cmi parse_error.cmo location.cmo config.cmo
+lexer.cmx: parser.cmx parse_error.cmx location.cmx config.cmx
+parse.cmo: parser.cmi parse_error.cmo location.cmo config.cmo
+parse.cmx: parser.cmx parse_error.cmx location.cmx config.cmx

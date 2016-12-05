@@ -1,0 +1,17 @@
+errorDico.cmi: ../parsing/location.cmo ../instantiation/instantiation.cmi
+msgDico.cmi:
+exceptHandler.cmi:
+errorDico.cmo: ../parsing/parse_error.cmo ../compilation/nameResolve.cmi \
+    ../parsing/location.cmo ../instantiation/instantiation.cmi errorDico.cmi
+errorDico.cmx: ../parsing/parse_error.cmx ../compilation/nameResolve.cmx \
+    ../parsing/location.cmx ../instantiation/instantiation.cmx errorDico.cmi
+msgDico.cmo: msgDico.cmi
+msgDico.cmx: msgDico.cmi
+exceptHandler.cmo: ../parsing/parser.cmi ../parsing/parse_error.cmo \
+    ../compilation/nameResolve.cmi msgDico.cmi ../parsing/location.cmo \
+    ../parsing/linenum.cmo ../instantiation/instantiation.cmi errorDico.cmi \
+    exceptHandler.cmi
+exceptHandler.cmx: ../parsing/parser.cmx ../parsing/parse_error.cmx \
+    ../compilation/nameResolve.cmx msgDico.cmx ../parsing/location.cmx \
+    ../parsing/linenum.cmx ../instantiation/instantiation.cmx errorDico.cmx \
+    exceptHandler.cmi
