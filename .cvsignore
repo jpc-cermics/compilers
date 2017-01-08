@@ -10,5 +10,5 @@
 *.exe
 *.bin
 *.byt
-Makefile.incl
+#Makefile.incl
 Path.incl
