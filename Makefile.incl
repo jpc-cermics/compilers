@@ -5,25 +5,25 @@
 
 # generated with configure.in
 
-OCAMLC="ocamlc"
-OCAMLOPT="ocamlopt"
+OCAMLC="i686-w64-mingw32-ocamlc"
+OCAMLOPT="i686-w64-mingw32-ocamlopt"
 CAML_BYT_COMP_FLAGS=-strict-sequence -warn-error Ae -annot -g
 CAML_BIN_COMP_FLAGS=-strict-sequence -w Ae -unsafe -noassert -inline 10000
-OCAMLLIB="/usr/lib/ocaml"
-OCAMLLEX="ocamllex.opt"
+OCAMLLIB="/usr/i686-w64-mingw32/lib/ocaml"
+OCAMLLEX="ocamllex"
 OCAMLYACC="ocamlyacc"
-OCAMLDEP="ocamldep"
+OCAMLDEP="i686-w64-mingw32-ocamldep"
 OCAMLDEP_FLAGS=-slash
 OCAMLPRINTC="ocamlprintc"
 OCAMLPRINTC_FLAGS=-c
 HTMLC_CONF_INCLUDES=
 HTMLC_CONF_ENV=
 HTMLC_FLAGS=-lang en -honor_line_continuation true
-HTMLC_COMMAND="htmlc"
+HTMLC_COMMAND="no"
 
-OCAMLVERSION="4.02.3"
+OCAMLVERSION="4.01.0"
 OCAML_VERSION_MAJOR="4"
-OCAML_VERSION_MINOR="02"
+OCAML_VERSION_MINOR="01"
 
 # compilation rules
 

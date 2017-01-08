@@ -1,6 +1,14 @@
-autom4te.cache
-config.log
-config.status
-Makefile.incl 
-configure
-
+## After changing, run
+##   svn propset svn:ignore -F .cvsignore -R .
+*.cm*
+*.o
+*.a
+*.annot
+*.output
+*.obj
+*.lib
+*.exe
+*.bin
+*.byt
+Makefile.incl
+Path.incl
