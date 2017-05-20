@@ -12,3 +12,6 @@
 *.byt
 Makefile.incl
 Path.incl
+config.log
+config.status
+configure
