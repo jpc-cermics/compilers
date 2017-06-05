@@ -1123,7 +1123,7 @@ let print_duplicate blk_tbl =
        a ^ " " ^ sprintf " %d .. %d\n" b.number b.orig_number else a)
     blk_tbl " "
 ;;
-
+(*
 let get_event_number blk_tbl =
   let event_number = Hashtbl.create 100 in
   let k = ref 1 in
@@ -1137,7 +1137,25 @@ let get_event_number blk_tbl =
     blk_tbl;
   event_number
 ;;
-
+*)
+let get_event_number blk_tbl =
+  let blocks = Array.make (Hashtbl.length blk_tbl) 0 in
+     Hashtbl.iter
+       (fun n b ->  if n > 0 then (
+          blocks.(n) <- Array.length b.ev_outs)
+       )
+    blk_tbl;
+  let event_numbers = Hashtbl.create 100 in
+    let k = ref 1 in
+       Array.iteri
+         (fun n nports ->
+           for i = 1 to nports - 1 do
+             Hashtbl.add event_numbers { blk = n; prt = i; } !k;
+             k := !k + 1; done
+         )
+       blocks;
+  event_numbers
+;;
 
 
 let sci_print_ord oc ordclk blk_tbl =
