@@ -26,6 +26,12 @@ compilation/nameResolve.cmo : compilation/types.cmi parsing/syntax.cmi \
     parsing/location.cmi compilation/nameResolve.cmi
 compilation/nameResolve.cmx : compilation/types.cmx parsing/syntax.cmx \
     parsing/location.cmx compilation/nameResolve.cmi
+instantiation/instantiation.cmo : compilation/types.cmi parsing/syntax.cmi \
+    compilation/nameResolve.cmi parsing/location.cmi \
+    instantiation/instantiation.cmi
+instantiation/instantiation.cmx : compilation/types.cmx parsing/syntax.cmx \
+    compilation/nameResolve.cmx parsing/location.cmx \
+    instantiation/instantiation.cmi
 exceptionHandling/errorDico.cmo : parsing/parse_error.cmi \
     compilation/nameResolve.cmi parsing/location.cmi \
     instantiation/instantiation.cmi exceptionHandling/errorDico.cmi
@@ -42,12 +48,6 @@ exceptionHandling/exceptHandler.cmx : parsing/parse_error.cmx \
     compilation/nameResolve.cmx exceptionHandling/msgDico.cmx \
     parsing/location.cmx parsing/linenum.cmx instantiation/instantiation.cmx \
     exceptionHandling/errorDico.cmx exceptionHandling/exceptHandler.cmi
-instantiation/instantiation.cmo : compilation/types.cmi parsing/syntax.cmi \
-    compilation/nameResolve.cmi parsing/location.cmi \
-    instantiation/instantiation.cmi
-instantiation/instantiation.cmx : compilation/types.cmx parsing/syntax.cmx \
-    compilation/nameResolve.cmx parsing/location.cmx \
-    instantiation/instantiation.cmi
 translation/codeGeneration.cmo : compilation/types.cmi \
     compilation/nameResolve.cmi instantiation/instantiation.cmi \
     exceptionHandling/errorDico.cmi translation/codeGeneration.cmi
@@ -82,12 +82,12 @@ parsing/parse.cmi : parsing/syntax.cmi parsing/parser.cmi \
 compilation/types.cmi :
 compilation/nameResolve.cmi : compilation/types.cmi parsing/syntax.cmi \
     parsing/location.cmi
+instantiation/instantiation.cmi : compilation/types.cmi parsing/syntax.cmi \
+    compilation/nameResolve.cmi parsing/location.cmi
 exceptionHandling/errorDico.cmi : parsing/location.cmi \
     instantiation/instantiation.cmi
 exceptionHandling/msgDico.cmi :
 exceptionHandling/exceptHandler.cmi :
-instantiation/instantiation.cmi : compilation/types.cmi parsing/syntax.cmi \
-    compilation/nameResolve.cmi parsing/location.cmi
 translation/codeGeneration.cmi : compilation/types.cmi \
     instantiation/instantiation.cmi
 translation/libraryManager.cmi : parsing/syntax.cmi parsing/location.cmi
