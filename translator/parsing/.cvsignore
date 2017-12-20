@@ -11,3 +11,10 @@ lexer.ml
 parser.mli
 parser.ml
 linenum.ml
+
+config.mli
+lexer.mli
+linenum.mli
+location.mli
+parse.mli
+parse_error.mli
