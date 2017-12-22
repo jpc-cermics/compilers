@@ -118,6 +118,9 @@ distclean::
 	@$(RM) $(SRC_ML_GENERATED_FILES)
 	@$(RM) $(SRC_MLI_GENERATED_FILES)
 
+distclean::
+	@$(RM) bin/modelicac.* bin/modelicac
+
 # Rebuilding dependencies
 # we need the generated ml and mli to exists for depend
 # to be properly generated (they are inserted in the $(SRC_MLI) $(SRC_ML) list).

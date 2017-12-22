@@ -95,6 +95,9 @@ distclean::
 	@$(RM) $(SRC_ML_GENERATED_FILES)
 	@$(RM) $(SRC_MLI_GENERATED_FILES)
 
+distclean::
+	@$(RM) bin/XML2Modelica.* bin/XML2Modelica
+
 # Rebuilding dependencies
 
 depend:: $(SRC_ML) $(SRC_MLI)

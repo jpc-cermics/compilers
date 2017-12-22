@@ -72,6 +72,9 @@ distclean::
 	@$(RM) $(SRC_ML_GENERATED_FILES)
 	@$(RM) $(SRC_MLI_GENERATED_FILES)
 
+distclean::
+	@$(RM) bin/paksazi.* bin/paksazi
+
 # Rebuilding dependencies
 
 depend:: $(CAML_FILES)
