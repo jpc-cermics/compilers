@@ -122,7 +122,7 @@ rule token = parse
                 { let lxm = Lexing.lexeme lexbuf in
                     check_reserved lxm }
 
-    | '`' (nondigit2 | digit)+ '`'
+    | '\'' (nondigit2 | digit)+ '\''
                 { let lxm = Lexing.lexeme lexbuf in
                     IDENT (String.sub lxm 1 (String.length lxm - 2)) }
 

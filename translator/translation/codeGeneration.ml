@@ -742,7 +742,7 @@ and ident_of_path path =
   | [Instantiation.Name _id] -> assert false
   | [Instantiation.Index _i] -> assert false
   | Instantiation.Name _id :: path ->
-      Printf.sprintf "`%s`" (ident_of_path' path)
+      Printf.sprintf "\'%s\'" (ident_of_path' path)
   | Instantiation.Index _i :: _path -> assert false
 
 and unquoted id =
