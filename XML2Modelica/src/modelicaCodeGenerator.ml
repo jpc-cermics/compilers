@@ -77,7 +77,7 @@ let generate_code init filename model =
     | Variable, false -> Printf.fprintf oc "  Real"
 
   and generate_identifier oc t =
-    Printf.fprintf oc " `%s`" (decode_spc t.id)
+    Printf.fprintf oc " \'%s\'" (decode_spc t.id)
   and generate_comment oc t =
     Printf.fprintf oc " \"%s\";\n" (decode_spc t.comment) in
   let generate_start_attribute oc t = match t.kind with
@@ -86,11 +86,11 @@ let generate_code init filename model =
         generate_attributes oc [ "start", t.initial_value ]
     | Variable | DiscreteVariable ->
         let equ =
-          Printf.sprintf "`%s` = %s;" (decode_spc t.id) t.initial_value in
+          Printf.sprintf "\'%s\' = %s;" (decode_spc t.id) t.initial_value in
         start_equations := equ :: !start_equations
     | FixedParameter | Parameter when t.fixed <> "false"  ->
         let equ =
-          Printf.sprintf "`%s` = %s;" (decode_spc t.id) t.initial_value in
+          Printf.sprintf "\'%s\' = %s;" (decode_spc t.id) t.initial_value in
         start_equations := equ :: !start_equations
     | FixedParameter | Parameter ->
       if init then Printf.fprintf oc " (start = %s)" t.initial_value
