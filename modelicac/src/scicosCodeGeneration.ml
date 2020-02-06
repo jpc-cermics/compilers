@@ -21,7 +21,7 @@
  *)
 
 open Num
-open SymbolicExpression 
+open SymbolicExpression
 open Optimization
 
 
@@ -94,7 +94,7 @@ let postprocess_residue model =
       (fun equ ->
         if not equ.solved && derivatives_of equ.expression = [] then
           equ.expression <- symbolic_mult cj equ.expression)
-      model.equations 
+      model.equations
   in
   let ders, nequs = Array.fold_left accumulate_derivatives ([], 0) model.equations in
   if nequs <> 0 && List.length ders = nequs then postprocess_residue' ()
@@ -153,7 +153,7 @@ let collect_surfaces model =
       String _ -> []
   and surfaces_of_argument = function
     | ScalarArgument expr -> surfaces_of expr
-    | ArrayArgument (_, exprs) -> 
+    | ArrayArgument (_, exprs) ->
         Array.fold_left
           (fun surfaces expr -> union surfaces (surfaces_of expr))
           []
@@ -288,7 +288,7 @@ let real_array_store_size model =
             (fun acc (expr, wexprs) ->
               max
                 (required_space expr)
-                (List.fold_left 
+                (List.fold_left
                   (fun acc wexpr ->
                     max acc (when_expression_required_space wexpr))
                   acc
@@ -783,8 +783,8 @@ in
             Array.fold_left
               (fun (j, k) variable ->
                    let alpha = create_constant ("alpha["^string_of_int(j)^"]")
-		   and beta  = create_constant ("beta["^string_of_int(j)^"]")
-		   in 
+                   and beta  = create_constant ("beta["^string_of_int(j)^"]")
+                   in
                 if not model.equations.(k).solved then begin
                   let dfdx =
                     symbolic_partial_derivative_with
@@ -801,7 +801,7 @@ in
                           equation.expression
                       in
                       symbolic_add  (symbolic_mult (alpha) dfdx) (symbolic_mult beta dfdxd)
-                     else (symbolic_mult alpha dfdx);             
+                     else (symbolic_mult alpha dfdx);
                   j + 1, k + 1
                 end else j, k + 1)
               (0, 0)
@@ -838,10 +838,10 @@ in
             Array.fold_left
               (fun (j, l) variable ->
                  let alpha = create_constant ("alpha["^string_of_int(j)^"]")
-		   and beta  = create_constant ("beta["^string_of_int(j)^"]")
-		   in 
+                   and beta  = create_constant ("beta["^string_of_int(j)^"]")
+                   in
                 if not model.equations.(l).solved then begin
-		let dgdx =
+                let dgdx =
                     if equation.solved then
                       symbolic_partial_derivative_with
                         dx
@@ -849,7 +849,7 @@ in
                         equation.expression
                     else if k = l then (symbolic_add one one)
                     else zero
-                in 
+                in
                 jacobian_matrix.(nx + i).(j) <-
                     if variable.state then
                        let dgdxd =
@@ -860,9 +860,9 @@ in
                            equation.expression
                          else if k = l then one
                          else zero;
-                       in 
+                       in
                        symbolic_add  (symbolic_mult (alpha) dgdx) (symbolic_mult beta dgdxd)
-                    else (symbolic_mult alpha dgdx); 
+                    else (symbolic_mult alpha dgdx);
                   j + 1, l + 1
                 end else j, l + 1)
               (0, 0)
@@ -908,7 +908,7 @@ in
   for j = 0 to nx - 1 do
     for i = 0 to nx - 1 do
       if ( jacobian_matrix.(i).(j) == zero) then   ()
-      else 
+      else
       let lhs = "res[" ^ (string_of_int ((j * nx) + i)) ^ "] = " in
       bufferize_rhs model_info 2 true lhs jacobian_matrix.(i).(j);
         Printf.bprintf model_info.code_buffer ";\n"
@@ -917,7 +917,7 @@ in
   for j = nx to nx + nu - 1 do
     for i = 0 to nx - 1 do
       if ( jacobian_matrix.(i).(j) == zero) then   ()
-      else 
+      else
       let lhs = "res[" ^ (string_of_int ((j * nx) + i)) ^ "] = " in
       bufferize_rhs model_info 2 true lhs jacobian_matrix.(i).(j);
       Printf.bprintf model_info.code_buffer ";\n"
@@ -927,7 +927,7 @@ in
   for j = 0 to nx - 1 do
     for i = nx to nx + ny - 1 do
       if ( jacobian_matrix.(i).(j) == zero) then   ()
-      else 
+      else
       let lhs =
         "res[" ^ (string_of_int (offset + (j * ny) + (i - nx))) ^ "] = "
       in
@@ -938,7 +938,7 @@ in
   for j = nx to nx + nu - 1 do
     for i = nx to nx + ny - 1 do
       if ( jacobian_matrix.(i).(j) == zero) then   ()
-      else 
+      else
       let lhs =
         "res[" ^ (string_of_int (offset + (j * ny) + (i - nx))) ^ "] = "
       in
@@ -1026,7 +1026,7 @@ let bufferize_when_equations model_info =
             add_to_occurrence_table false expr model_info)
           when_exprs;
         model_info.current_index <- -1;
-        List.iter 
+        List.iter
           (function
             | Assign (expr, expr') ->
                 begin match nature expr with
@@ -1082,7 +1082,7 @@ let bufferize_surfaces model_info =
           "\t\tif (!areModesFixed(block)) {\n";
         let _ =
           List.fold_left
-            (fun i cond -> 
+            (fun i cond ->
               let lhs = "mode[" ^ (string_of_int i) ^ "] = " in
               bufferize_rhs model_info 3 false lhs cond;
               Printf.bprintf model_info.code_buffer " ? 1 : 2;\n";
@@ -1388,7 +1388,7 @@ let generate_c_function_prototype oc name in_types out_types =
       Printf.fprintf oc "\nextern double %s(" name;
       generate_c_function_input_arguments in_types;
       Printf.fprintf oc ");\n"
-  | _ -> failwith "generate_c_function_prototype: unsupported function type" 
+  | _ -> failwith "generate_c_function_prototype: unsupported function type"
 
 let generate_code _path filename fun_name model with_jac _ init =
 (*
@@ -1435,7 +1435,7 @@ let generate_code _path filename fun_name model with_jac _ init =
       0
       model.equations
   and nb_dvars = Array.length model.discrete_variables
-  and nb_pars = 
+  and nb_pars =
     Array.fold_left
       (fun acc parameter -> if parameter.main then acc + 1 else acc)
       0
@@ -1634,11 +1634,11 @@ let generate_code _path filename fun_name model with_jac _ init =
           filename
   end;
   bufferize_initializations init nb_pars nb_dvars nb_vars nb_ders model_info;
-  if with_jac then 
+  if with_jac then
     Printf.bprintf model_info.code_buffer "\t\t  SetAjac(block,1);\n"
    else
     Printf.bprintf model_info.code_buffer "\t\t  SetAjac(block,0);\n"
-  ;
+;
   Printf.bprintf model_info.code_buffer "\t} else if (flag == 5) {\n";
   bufferize_parameter_value init nb_pars model_info;
   bufferize_variable_store init nb_pars nb_dvars nb_ders model_info;

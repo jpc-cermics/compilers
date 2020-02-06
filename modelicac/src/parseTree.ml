@@ -23,7 +23,7 @@
 (* To be extended like:
 type 'a node =
   {
-    location : location option ;
+    location : location option;
     value : 'a
   }
 

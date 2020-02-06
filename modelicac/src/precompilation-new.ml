@@ -102,12 +102,12 @@ and precompile_not_final_class_definition parent map = function
   | ParseTree.ClassDefinition (ParseTree.Function, _ ,
     ParseTree.NotEncapsulated, ParseTree.Partial, _ )
   | ParseTree.ClassDefinition (ParseTree.Function, _ ,
-    ParseTree.Encapsulated, _ , _) 
+    ParseTree.Encapsulated, _ , _)
   | ParseTree.ClassDefinition (ParseTree.Model, _ ,_,_,_)
   | ParseTree.ClassDefinition (ParseTree.Record, _ ,_,_,_)
   | ParseTree.ClassDefinition (ParseTree.Connector, _ ,_,_,_)
   | ParseTree.ClassDefinition (ParseTree.Type, _ ,_,_,_)
-  | ParseTree.ClassDefinition (ParseTree.Package, _ ,_,_,_) -> 
+  | ParseTree.ClassDefinition (ParseTree.Package, _ ,_,_,_) ->
       failwith "precompile_class_definition: Unsupported class definition"
 
 and precompile_class_specifier_into cl id = function
@@ -123,13 +123,13 @@ and precompile_composition_into cl = function
   | ParseTree.Composition (elts, other_elts_list, None) ->
       precompile_public_elements_into cl elts;
       precompile_other_elements_into cl other_elts_list
-  | ParseTree.Composition (elts, other_elts_list, Some pt) -> 
+  | ParseTree.Composition (elts, other_elts_list, Some pt) ->
       (match pt with
       | ParseTree.External (None, None, None) ->
-	  precompile_public_elements_into cl elts;
-	  precompile_other_elements_into cl other_elts_list
-      | ParseTree.External (_ , _ ,_) -> 
-	  failwith "precompile_composition_into: invalid external function call")
+          precompile_public_elements_into cl elts;
+          precompile_other_elements_into cl other_elts_list
+      | ParseTree.External (_ , _ ,_) ->
+          failwith "precompile_composition_into: invalid external function call")
 
 and precompile_public_elements_into cl elts =
   List.iter (precompile_public_element_into cl) elts
@@ -221,19 +221,19 @@ and precompile_class_modification = function
       List.map precompile_argument args
 
 and precompile_argument = function
-  | ParseTree.ElementModification (ParseTree.NotEach, 
-				   final, cpnt_ref, modification, _ ) -> 
+  | ParseTree.ElementModification (ParseTree.NotEach,
+                                   final, cpnt_ref, modification, _ ) ->
     (match final with
-    | ParseTree.NotFinal -> 
-	(match modification with		    		     
-	| ParseTree.Modification (class_modif, expr_opt) -> 
-	    let modifs = precompile_class_modification class_modif in
-	    Modification (cpnt_ref, modifs, expr_opt)
-	| ParseTree.Eq expr
-	| ParseTree.ColEq expr -> 
-	    Modification (cpnt_ref, [], Some expr))
+    | ParseTree.NotFinal ->
+        (match modification with
+        | ParseTree.Modification (class_modif, expr_opt) ->
+            let modifs = precompile_class_modification class_modif in
+            Modification (cpnt_ref, modifs, expr_opt)
+        | ParseTree.Eq expr
+        | ParseTree.ColEq expr ->
+            Modification (cpnt_ref, [], Some expr))
     | ParseTree.Final -> failwith "Unsupported modification"
     )
-  | ParseTree.ElementModification (ParseTree.Each,_ , _ , _ , _) 
+  | ParseTree.ElementModification (ParseTree.Each,_ , _ , _ , _)
   | ParseTree.ElementRedeclaration (_,_,_) ->
       failwith "Unsupported modification"

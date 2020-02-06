@@ -8,7 +8,7 @@ let parse filename token_fun lexbuf =
         Printf.eprintf
           "Syntax error at line %d, characters %d to %d\n"
           linenum
-          first_char 
+          first_char
           ((Lexing.lexeme_end lexbuf - Lexing.lexeme_start lexbuf) + first_char);
         raise Parsing.Parse_error
 ;;

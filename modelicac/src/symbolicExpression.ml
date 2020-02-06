@@ -893,7 +893,8 @@ and symbolic_partial_derivative_with step var node' =
         Floor _ | Parameter _ | Sign _ | TimeVariable | Variable _ |
         BlackBox (_, []) -> zero
       | BlackBox _ ->
-          let node' = replace var (var + step) node in (node' - node) / step
+          let node' = replace var (var + step) node in
+          (node' - node) / step
       | PartialDerivative _ ->
           create_partialDerivative var node
       | Addition nodes ->
@@ -1429,7 +1430,8 @@ and output out_channel node =
     | [] -> assert false
     | dim :: dims ->
         output_char' '{';
-        let _ = output_array_argument' dim dims 0 in ();
+        let _ = output_array_argument' dim dims 0 in
+        ();
         output_char' '}' in
   output' 0 node
 

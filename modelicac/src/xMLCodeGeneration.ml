@@ -47,9 +47,10 @@ let rec insert path x ts =
 
 let cut_on_dot s =
   let rec cut_on_dot' i =
-    if i = String.length s then s, None
-      else if s.[i] = '.' then String.sub s 0 i, Some (String.sub s (i + 1) (String.length s - i - 1))
-      else cut_on_dot' (i + 1)
+    if i = String.length s then s, None else
+    if s.[i] = '.' then
+       String.sub s 0 i, Some (String.sub s (i + 1) (String.length s - i - 1))
+    else cut_on_dot' (i + 1)
   in cut_on_dot' 0
 
 let rec split name =
@@ -83,7 +84,7 @@ let build_tree model =
       (fun (i, ts) s ->
         i + 1,
         insert
-          (split s) 
+          (split s)
           {
             kind = Input;
             id = s;
@@ -379,7 +380,7 @@ let print_tree oc model ts =
         print_tabs (tabs + 1);
         Printf.fprintf oc "<kind>%s</kind>\n" (string_of_kind elt.kind);
         print_tabs (tabs + 1);
-        Printf.fprintf oc "<id>%s</id>\n" (hide_spc elt.id);        
+        Printf.fprintf oc "<id>%s</id>\n" (hide_spc elt.id);
         print_tabs (tabs + 1);
         Printf.fprintf oc "<comment value=\"%s\"/>\n" (hide_spc elt.comment);
         print_tabs (tabs + 1);

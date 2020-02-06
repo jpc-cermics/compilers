@@ -85,7 +85,8 @@ module Make (M : MatrixElement) : (S with type elt = M.t) =
                 columns = columns
               }
 
-        let size mtrx = let size = Array.length mtrx.rows in (size, size)
+        let size mtrx = let size = Array.length mtrx.rows in
+        (size, size)
 
         let get mtrx i j = try !(List.assoc j mtrx.rows.(i)) with
             | Not_found -> mtrx.default
@@ -94,7 +95,7 @@ module Make (M : MatrixElement) : (S with type elt = M.t) =
             | Not_found ->
                 mtrx.rows.(i) <- (j, ref elt) :: mtrx.rows.(i);
                 mtrx.columns.(j) <- (i, ref elt) :: mtrx.columns.(j)
-        
+
         let row_iter i f mtrx =
             for j = 0 to Array.length mtrx.rows - 1 do
                 f (get mtrx i j)
@@ -154,9 +155,11 @@ row_iter 0 (fun elt -> print_int elt; print_newline ()) m;;
 
 row_iterj 0 (fun j elt -> print_int j; print_string " -> ";print_int elt; print_newline ()) m;;
 
-row_iterj 1 (fun j elt -> set m 1 j j) m;;
+row_iterj 1 (fun j elt -> set m 1 j j) m
+;;
 
-swap_rows m 0 1;;
+swap_rows m 0 1
+;;
 
 row_iterj 0 (fun j elt -> print_int j; print_string " -> ";print_int elt; print_newline ()) m;;
 
