@@ -161,8 +161,9 @@ let num_of_float f =
   let num_of_positive_float f =
     let m, e = frexp f in
     let sm = string_of_float m in
-    let s = String.make 16 '0' in
-    String.blit sm 2 s 0 (String.length sm - 2);
+    let len_frac = String.length sm - 2 in
+    let frac = String.sub sm 2 len_frac in
+    let s = frac ^ String.make (16 - len_frac) '0' in
     let e' = Num.power_num (Num.Int 2) (Num.num_of_int e) in
     Num.div_num (Num.mult_num (Num.num_of_string s) e') scaling_factor
   in
