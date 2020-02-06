@@ -34,32 +34,32 @@ type data = {
 }
 ;;
 
-
-let close_out oc = Pervasives.flush oc; 
-  Pervasives.close_out oc
+let paksazi_close_out oc =
+  (*Pervasives.*)flush oc;
+  (*Pervasives.*)close_out oc
 ;;
 
 let read_blk ib _blk =
-  let res = ref [] in 
-  let rct = ref true in 
-  while !rct do 
+  let res = ref [] in
+  let rct = ref true in
+  while !rct do
     try
-      ignore 
-	(
-	 bscanf ib " %d %d %d %d %s "
-	   (fun a b c d s ->
+      ignore
+        (
+         bscanf ib " %d %d %d %d %s "
+           (fun a b c d s ->
              let vec = Array.init a (fun _i -> bscanf ib " %d " (fun x -> x)) in
-	     res := 
+             res :=
                { typ = s; insz = a; outsz = b; clkinsz = c; clkoutsz = d;
-		 depu_ = vec; } :: !res ))
+                 depu_ = vec; } :: !res ))
     with
-    | Scanf.Scan_failure _ib -> 
-	rct := false;
+    | Scanf.Scan_failure _ib ->
+        rct := false;
   done;
-  List.rev !res 
+  List.rev !res
 ;;
 
-(* 
+(*
 let rec read_conn ib conn =
   try
     bscanf ib " %d %d %d %d "
@@ -72,23 +72,23 @@ let rec read_conn ib conn =
 *)
 
 let read_conn ib _conn =
-  let res = ref [] in 
-  let rct = ref true in 
-  while !rct do 
+  let res = ref [] in
+  let rct = ref true in
+  while !rct do
     try
-      ignore 
-	(bscanf ib " %d %d %d %d "
-	   (fun a b c d ->
-	     res := [| a; b; c; d; |] :: !res ))
+      ignore
+        (bscanf ib " %d %d %d %d "
+           (fun a b c d ->
+             res := [| a; b; c; d; |] :: !res ))
     with
-    | Scanf.Scan_failure _ib -> 
-	rct := false;
+    | Scanf.Scan_failure _ib ->
+        rct := false;
   done;
-  List.rev !res 
+  List.rev !res
 ;;
 
 let rec read_data ib data =
-  bscanf ib " %s " 
+  bscanf ib " %s "
     (function
       | "BLOCKS" -> data.blks <- read_blk ib []; read_data ib data
       | "CONNECT" -> data.connect <- read_conn ib []; read_data ib data
@@ -167,10 +167,10 @@ let create_inports insz connmat i =
     match k with
     | -1 -> ll
     | _ ->
-	List.fold_left (h i k) SetOrderedports.empty connmat ::
-	create_entry (k - 1) connmat i ll in
-  let res = create_entry insz connmat i [] in 
-  res 
+        List.fold_left (h i k) SetOrderedports.empty connmat ::
+        create_entry (k - 1) connmat i ll in
+  let res = create_entry insz connmat i [] in
+  res
 ;;
 
 let create_outports outsz connmat i =
@@ -397,8 +397,8 @@ let rec pak_ersi blk_tbl =
   if not !finished then pak_ersi blk_tbl
 ;;
 
-(* ^ should be used with care 
- * a print function should print 
+(* ^ should be used with care
+ * a print function should print
  *)
 
 (*
@@ -413,12 +413,12 @@ let print_list_ports l str =
 *)
 
 let print_list_ports oc l str =
-  let print_ports oc l = 
+  let print_ports oc l =
     List.iter
-      (fun {blk = b ; prt = p;} -> 
-         Printf.fprintf oc "\n%d,%d" b p) 
-      l in 
-  Printf.fprintf oc "%s=[%a]\n" 
+      (fun {blk = b; prt = p;} ->
+         Printf.fprintf oc "\n%d,%d" b p)
+      l in
+  Printf.fprintf oc "%s=[%a]\n"
     str print_ports l
 ;;
 
@@ -441,7 +441,7 @@ let sci_print_file_error err_blks err_msg filename =
   fprintf oc "%s"
     "ordptr=[],ordclk=[],critical=[],ztyp_blocks=[],dup=[],cord=[],oord=[],zord=[],iord=[],ok=0";
   fprintf oc "%s" "\nendfunction\n";
-  close_out oc;
+  paksazi_close_out oc;
   raise AlgebraicLoop
 ;;
 
@@ -508,7 +508,7 @@ let print_blocks_info blk_tbl filename =
   let oc = open_out filename in
   let g blknum _blk l = print_blockinfo blk_tbl blknum ^ "\n" ^ l in
   fprintf oc "%s" (Hashtbl.fold g blk_tbl "");
-  close_out oc
+  paksazi_close_out oc
 ;;
 
 let modify_links blk_tbl block inter =
@@ -839,7 +839,7 @@ let ordonnance blk_tbl port level =
         | _ ->
           sci_print_file_error
             (block_list_to_num_list ki)
-            "Algebraic loop" "mlcos.sci" in 
+            "Algebraic loop" "mlcos.sci" in
       let ord = List.fold_left g ord k in
       to_move_down :=
         List.filter
@@ -1031,13 +1031,13 @@ let paksazi blk_tbl =
      | _ ->
        (* print_port_set ext_cord; printf "\nordclki %s"
             (print_list_ports ordclki ""); *)
-       let ordclki' = List.rev 
-	   (
+       let ordclki' = List.rev
+           (
             List.fold_left
               (fun b ai ->
-		if SetOrderedports.exists (iscovered ai) ext_cord
-		then { blk = ai.blk; prt = -(ai.prt); } :: b
-		else ai :: b)
+                if SetOrderedports.exists (iscovered ai) ext_cord
+                then { blk = ai.blk; prt = -(ai.prt); } :: b
+                else ai :: b)
               [] ordclki ) in
        Hashtbl.replace ordclk i ordclki')
     ordclk;
@@ -1160,15 +1160,15 @@ let get_event_number blk_tbl =
 
 let sci_print_ord oc ordclk blk_tbl =
 
-  let print_port oc n i = 
+  let print_port oc n i =
     let port = make_port n i in
     if Hashtbl.mem ordclk port then
       let ports = Hashtbl.find ordclk port in
       List.iter
         (fun {blk = b; prt = p; } ->
-  	  Printf.fprintf oc "\n%d,%d" b p)
-        ports in 
-  
+            Printf.fprintf oc "\n%d,%d" b p)
+        ports in
+
   let print_ptr oc accu n i =
     let port = make_port n i in
     if Hashtbl.mem ordclk port then
@@ -1179,53 +1179,53 @@ let sci_print_ord oc ordclk blk_tbl =
       (
        Printf.fprintf oc "%d;" accu;
        accu) in
-  
-  let print_ordclk_i oc n ev_out = 
+
+  let print_ordclk_i oc n ev_out =
     let lim = Array.length ev_out - 1 in
-    let rec loop i = 
-      if i <= lim then 
-	(
-	 print_port oc n i;
-	 loop (i + 1)
-	) in
+    let rec loop i =
+      if i <= lim then
+        (
+         print_port oc n i;
+         loop (i + 1)
+        ) in
     loop 1 in
 
-  let print_ordptr_i oc accu1 n ev_out = 
+  let print_ordptr_i oc accu1 n ev_out =
     let lim = Array.length ev_out - 1 in
-    let rec loop i accu = 
+    let rec loop i accu =
       if i > lim then accu else
       let accu = print_ptr oc accu n i in
       loop (i + 1) accu in
     loop 1 accu1 in
-  
-  let print_ordptr oc () = 
+
+  let print_ordptr oc () =
     let lim = Hashtbl.length blk_tbl - 1 in
-    let rec loop n accu = 
+    let rec loop n accu =
       if n >= lim then () else
-      let accu = 
+      let accu =
         if Hashtbl.mem blk_tbl n then
           let b = Hashtbl.find blk_tbl n in
-	  print_ordptr_i oc accu n b.ev_outs
+          print_ordptr_i oc accu n b.ev_outs
         else
-	  accu in
+          accu in
       loop (n + 1) accu in
     loop 1 1 in
-  
-  let print_ordclk oc () = 
+
+  let print_ordclk oc () =
     let lim = Hashtbl.length blk_tbl - 1 in
-    let rec loop n  = 
+    let rec loop n  =
       if n >= lim then () else
       begin
-	if Hashtbl.mem blk_tbl n then
-	  begin 
+        if Hashtbl.mem blk_tbl n then
+          begin
             let b = Hashtbl.find blk_tbl n in
-	    print_ordclk_i oc n b.ev_outs;
-	  end;
-	loop (n + 1) 
+            print_ordclk_i oc n b.ev_outs;
+          end;
+        loop (n + 1)
       end in
     loop 1 in
-  
-  Printf.fprintf oc 
+
+  Printf.fprintf oc
     "ordptr = [1%a];\n\
      ordclk = [%a];\n"
     print_ordptr ()
@@ -1311,31 +1311,31 @@ let print_sci_file blk_tbl ordclk critev filename =
   prerr_endline "pakzazi 9";
   fprintf oc "%s" "ok=1,err_blks=[],err_msg=''\n";
   fprintf oc "%s" "endfunction\n";
-  close_out oc;
+  paksazi_close_out oc;
 ;;
 
 let main () =
   try
     let ib = Scanning.from_file "datacos" in
     let data = read_data ib { blks = []; connect = []; clkconnect = []; } in
-     Printf.printf "one";print_endline ""; 
+     Printf.printf "one";print_endline "";
     let blk_tbl = Hashtbl.create 100000 in
     init_blk_tbl data blk_tbl;
-    Printf.printf "two";print_endline ""; 
+    Printf.printf "two";print_endline "";
     comp_iord blk_tbl;
-     Printf.printf "three";print_endline ""; 
+     Printf.printf "three";print_endline "";
     pak_ersi blk_tbl;
-     Printf.printf "four";print_endline ""; 
+     Printf.printf "four";print_endline "";
     upAllEvents blk_tbl;
-     Printf.printf "five";print_endline ""; 
+     Printf.printf "five";print_endline "";
     test_alg_loop blk_tbl;
-     Printf.printf "six";print_endline ""; 
+     Printf.printf "six";print_endline "";
     let ordclk = paksazi blk_tbl in
-     Printf.printf "seven";print_endline ""; 
+     Printf.printf "seven";print_endline "";
     let critev = get_critev blk_tbl ordclk in
-     Printf.printf "height";print_endline ""; 
+     Printf.printf "height";print_endline "";
     print_sci_file blk_tbl ordclk critev "mlcos.sci";
-     Printf.printf "end";print_endline ""; 
+     Printf.printf "end";print_endline "";
   with
   | AlgebraicLoop -> ()
 ;;
