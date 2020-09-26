@@ -22,6 +22,31 @@
 
 open Num;;
 
+let zero_num = Int 0
+let one_num = Int 1
+let two_num = Int 2
+let minus_one_num = Int (-1)
+let equal_num num num' = eq_num num num'
+let float_of_num num = Num.float_of_num num 
+let is_integer_num num = Num.is_integer_num num
+let lt_num num num' = Num.lt_num num num'
+let int_of_num num  = Num.int_of_num num 
+let string_of_num num = Num.string_of_num num
+let power_num num num' = Num.power_num num num'
+let num_of_int n = Num.num_of_int n
+
+let div_num  num  num'  = Num.div_num num  num'
+let mult_num num  num' = Num.mult_num num  num'
+let minus_num num = Num.minus_num num
+let num_of_string s = Num.num_of_string s
+
+
+let ratio_decompose num =
+   let ratio = ratio_of_num num in 
+   let numerator = num_of_big_int (Ratio.numerator_ratio ratio)
+   and denominator = num_of_big_int (Ratio.denominator_ratio ratio) in
+   (numerator, denominator)
+
 exception Infinite_result of string
 
 
@@ -542,18 +567,14 @@ let variableNodeSet =
 
 (* Node creation *)
 
-let zero_num = Int 0
-let one_num = Int 1
-let two_num = Int 2
-
-let minus_one = NodeSet.find_or_add (Int (-1)) numberNodeSet
+let minus_one = NodeSet.find_or_add minus_one_num numberNodeSet
 let zero = NodeSet.find_or_add zero_num numberNodeSet
 let one = NodeSet.find_or_add one_num numberNodeSet
 let two = NodeSet.find_or_add two_num numberNodeSet
-let ten = NodeSet.find_or_add (Int 10) numberNodeSet
+let ten = NodeSet.find_or_add (num_of_int 10) numberNodeSet
 let one_over_two = NodeSet.find_or_add (div_num (one_num) two_num) numberNodeSet
 let minus_one_over_two =
-  NodeSet.find_or_add (div_num (Int (-1)) two_num) numberNodeSet
+  NodeSet.find_or_add (div_num minus_one_num two_num) numberNodeSet
 let pi = NodeSet.find_or_add "3.14159265359" constantNodeSet
 let pi_over_two =
   NodeSet.find_or_add (insert one_over_two [pi]) multiplicationNodeSet
@@ -642,10 +663,10 @@ let create_multiplication = function
 
 let create_not node = NodeSet.find_or_add node notNodeSet
 
-let create_number = function
-  | Int 0 -> zero
-  | Int 1 -> one
-  | num -> NodeSet.find_or_add num numberNodeSet
+let create_number n = 
+ if eq_num n zero_num then zero 
+ else if eq_num n one_num then one 
+ else NodeSet.find_or_add n numberNodeSet
 
 let create_or = function
   | [] -> or_neutral
@@ -737,11 +758,17 @@ and symbolic_cosh node =
   if node == zero then one
   else create_hyperbolicCosine node
 
-and symbolic_derive node' num = match num with
+(* and symbolic_derive node' num = match num with
   | Int 0 -> node'
   | Int n when n > 0 ->
       symbolic_derive (symbolic_derivative node') (pred_num num)
-  | _ -> assert false
+  | _ -> assert false *) 
+
+and symbolic_derive node' num =
+ if eq_num num zero_num then node'
+ else if is_integer_num num && gt_num num zero_num then 
+     symbolic_derive (symbolic_derivative node') ( pred_num num)
+ else assert false
 
 and symbolic_derivative node' =
   let ( + ) = symbolic_add
@@ -958,7 +985,7 @@ and symbolic_rationalPower node num' =
     | _ -> create_rationalPower node num'
 
 and symbolic_sgn node = match node.nature with
-  | Number num -> create_number (Int (sign_num num))
+  | Number num -> create_number (num_of_int (sign_num num))
   | _ -> create_sign node
 
 and symbolic_sin node =
@@ -1181,6 +1208,11 @@ and apply_or nodes =
 
 
 (* Input/output *)
+  
+and number_classify num precedence =
+  if is_integer_num num then
+  ( if lt_num num zero_num then  75 else 1000)
+  else precedence
 
 and output out_channel node =
   let mult_precedence = 50 in
@@ -1200,9 +1232,10 @@ and output out_channel node =
     | Multiplication _ -> mult_precedence
     | Integer i when i < 0l -> 75
     | Integer _ -> 1000
-    | Number (Ratio _) -> mult_precedence
-    | Number num when lt_num num zero_num -> 75
-    | Number (Int _) | Number (Big_int _)  -> 1000
+(*    | Number (Ratio _) -> mult_precedence
+      | Number num when lt_num num zero_num -> 75
+      | Number (Int _) | Number (Big_int _)  -> 1000 *)
+    | Number num -> number_classify num mult_precedence
     | Or _ -> 7
     | RationalPower (_, num) when lt_num num zero_num -> mult_precedence
     | RationalPower _ -> 100
@@ -1290,7 +1323,7 @@ and output out_channel node =
     | Multiplication nodes' ->
       let not_reciprocals, reciprocals = List.fold_left
         (fun (nodes, nodes') node -> match node.nature with
-          | Number (Ratio _ as num) ->
+          (* | Number (Ratio _ as num) ->
             let ratio = ratio_of_num num in
             let numerator = num_of_big_int (Ratio.numerator_ratio ratio)
             and denominator = num_of_big_int (Ratio.denominator_ratio ratio) in
@@ -1299,7 +1332,18 @@ and output out_channel node =
             else
               (create_number numerator :: nodes),
               (create_number denominator :: nodes')
-          | RationalPower (node'', num) when eq_num num (Int (-1)) ->
+           *)
+          | Number num ->
+	    if is_integer_num num then (node :: nodes), nodes'
+	    else
+	      let (numerator, denominator ) = ratio_decompose num in 
+	      if eq_num numerator one_num then
+ 	         nodes, (create_number denominator :: nodes')
+	      else
+                 (create_number numerator :: nodes),
+                 (create_number denominator :: nodes')
+
+          | RationalPower (node'', num) when eq_num num minus_one_num ->
               nodes, (node'' :: nodes')
           | RationalPower (node'', num) when lt_num num zero_num ->
               nodes, (create_rationalPower node'' (minus_num num) :: nodes')
@@ -1311,7 +1355,7 @@ and output out_channel node =
         | [] -> output_char' '1'
         | node' :: nodes' ->
             begin match node'.nature with
-              | Number (Int -1) ->
+              | Number num when eq_num num minus_one_num ->
                 output_char' '-';
                 begin match nodes' with
                   | [] -> output_char' '1'
@@ -1362,23 +1406,22 @@ and output out_channel node =
     | Pre node' -> output_string' "pre"; output' (precedence node) node'
     | RationalPower (node', num) when ge_num num zero_num ->
         output' (precedence node) node'; output_string' " ^ ";
-        begin match num with
-          | Int _ | Big_int _ -> output_string' (string_of_num num)
-          | Ratio _ ->
-              output_char' '('; output_string' (string_of_num num);
-              output_char' ')'
-        end
-    | RationalPower (node', num) when eq_num num (Int (-1)) ->
+        if is_integer_num num then 
+	  output_string' (string_of_num num)
+	else
+	  output_char' '('; output_string' (string_of_num num);
+          output_char' ')'
+    | RationalPower (node', num) when eq_num num minus_one_num ->
         output_string' "1 / "; output' (mult_precedence + 1) node'
     | RationalPower (node', num) ->
         output_string' "1 / "; output' (precedence node) node';
         output_string' " ^ ";
-        begin match num with
-          | Int _ | Big_int _ -> output_string' (string_of_num (minus_num num))
-          | Ratio _ ->
-              output_char' '('; output_string' (string_of_num (minus_num num));
-              output_char' ')'
-        end
+	if is_integer_num num then
+	   output_string' (string_of_num (minus_num num))
+	else
+	  output_char' '(';
+	  output_string' (string_of_num (minus_num num));
+	  output_char' ')'
     | Sign node' -> output_string' "sgn"; output' (precedence node) node'
     | Sine node' -> output_string' "sin"; output' (precedence node) node'
     | Greater (node', node'') ->
@@ -1639,7 +1682,7 @@ and inputs_of node =
 and invert_if_possible_with_respect_to node left right =
   let not_null node = match node.nature with
     | Constant _ -> true
-    | Number num -> num <>/ zero_num
+    | Number num -> not (eq_num num zero_num)
     | _ -> false
   in
   let invert_addition_if_possible nodes =
@@ -1703,7 +1746,7 @@ and invert_if_possible_with_respect_to node left right =
         invert_if_possible_with_respect_to
           node
           node'
-          (symbolic_rationalPower right (one_num // num))
+          (symbolic_rationalPower right (div_num one_num num))
     | RationalPower _ -> None
     | And _ | Constant _ | BooleanValue _ | Equality _ | Greater _ |
       GreaterEqual _ | DiscreteVariable _ | Not _ | Number _ | Or _ |

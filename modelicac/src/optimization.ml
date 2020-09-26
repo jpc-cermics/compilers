@@ -149,7 +149,7 @@ and when_expression =
   | Reinit of t * t
 
 
-let scaling_factor = Num.power_num (Num.Int 10) (Num.Int 16)
+let scaling_factor = power_num (num_of_int 10) (num_of_int 16)
 
 let exists_array p xs =
   let l = Array.length xs in
@@ -164,13 +164,13 @@ let num_of_float f =
     let len_frac = String.length sm - 2 in
     let frac = String.sub sm 2 len_frac in
     let s = frac ^ String.make (16 - len_frac) '0' in
-    let e' = Num.power_num (Num.Int 2) (Num.num_of_int e) in
-    Num.div_num (Num.mult_num (Num.num_of_string s) e') scaling_factor
+    let e' = power_num (num_of_int 2) (num_of_int e) in
+    div_num (mult_num (num_of_string s) e') scaling_factor
   in
-  if f = 0.0 then Num.Int 0
+  if f = 0.0 then zero_num 
   else if f < 0.0 then
     let num = num_of_positive_float (abs_float f) in
-    Num.minus_num num
+    minus_num num
   else num_of_positive_float f
 
 let string_of_reference = function
@@ -831,7 +831,7 @@ let create_model' trace inl_par iexpr =
     List.fold_left
       (fun vars der ->
         match nature der with
-          | Derivative (expr, num) when num = Num.Int 1 ->
+          | Derivative (expr, num) when num = one_num ->
               begin match nature expr with
                 | Variable _ -> expr :: vars
                 | _ -> assert false
@@ -1272,13 +1272,15 @@ let eliminate_trivial_relations max_simplifs model =
             | Variable i, Multiplication [node; node'] |
               Multiplication [node; node'], Variable i ->
                 begin match nature node, nature node' with
-                  | Number (Num.Int (-1)), Variable j |
-                    Variable j, Number (Num.Int (-1)) ->
-                      let k = choose_variable i j in
-                      update_variable_attributes i j;
-                      permute_equations k n;
-                      ignore (perform_then_propagate_inversion model k);
-                      decr max_simplifs_ref
+                  | Number num , Variable j 
+                  | Variable j, Number num ->
+		      if equal_num num minus_one_num then
+		        let k = choose_variable i j in
+                        update_variable_attributes i j;
+                        permute_equations k n;
+                        ignore (perform_then_propagate_inversion model k);
+                        decr max_simplifs_ref
+		      else ()
                   | _ -> ()
                 end
             | _ -> ()
@@ -1299,7 +1301,7 @@ let eliminate_explicit_variables max_simplifs model =
   let try_reducing_state var i =
     let vars = model.equations.(i).assignable_variables
     and ders = model.equations.(i).inner_derivatives in
-    if not (List.memq (symbolic_derive var (Num.Int 1)) ders) then begin
+    if not (List.memq (symbolic_derive var one_num) ders) then begin
       Printf.eprintf "\nTrying to reduce state...";
       match ders with
       | [] when List.for_all is_state_variable vars ->

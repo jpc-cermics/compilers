@@ -20,6 +20,8 @@
  *
  *)
 
+open SymbolicExpression
+
 type 'a tree = Leaf of (string * 'a) | Node of string * 'a tree list
 
 (* function used to hide XML special characters *)
@@ -189,7 +191,7 @@ let print_expression oc model expr =
     | SymbolicExpression.Cosine expr ->
         let s = string_of_expression expr_option' expr in
         Printf.sprintf "cos(%s)" s
-    | SymbolicExpression.Derivative (expr, Num.Int 1) ->
+    | SymbolicExpression.Derivative (expr, num ) when equal_num num one_num ->
         let s = string_of_expression expr_option' expr in
         Printf.sprintf "der(%s)" s
     | SymbolicExpression.Derivative _ -> assert false
@@ -253,7 +255,7 @@ let print_expression oc model expr =
         let s = string_of_expression expr_option' expr in
         add_parenthesis expr_option (Printf.sprintf "not %s" s)
     | SymbolicExpression.Number num ->
-        let s = Printf.sprintf "%.16g" (Num.float_of_num num) in
+        let s = Printf.sprintf "%.16g" (float_of_num num) in
         add_parenthesis expr_option s
     | SymbolicExpression.Or [] -> "true"
     | SymbolicExpression.Or [expr] ->
@@ -293,7 +295,7 @@ let print_expression oc model expr =
     | SymbolicExpression.RationalPower (expr, num) ->
         let s = Printf.sprintf "%s ^ (%s)"
           (string_of_expression expr_option' expr)
-          (Num.string_of_num num) in
+          (string_of_num num) in
         add_parenthesis expr_option s
     | SymbolicExpression.Sign expr ->
         let s = string_of_expression expr_option' expr in

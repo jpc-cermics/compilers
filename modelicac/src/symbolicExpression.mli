@@ -26,6 +26,22 @@ models to simulation code. *)
 
 open Num
 
+val zero_num: num
+val minus_one_num: num
+val one_num: num
+val equal_num: num -> num -> bool
+val float_of_num: num -> float
+val is_integer_num: num -> bool
+val lt_num: num -> num -> bool
+val int_of_num: num -> int
+val string_of_num: num -> string
+val power_num: num -> num -> num
+val div_num: num -> num -> num
+val mult_num: num -> num -> num
+val minus_num: num -> num
+val num_of_string: string -> num
+val num_of_int: int -> num
+
 exception Infinite_result of string
 (** [Infinite_result] is raised when the result of symbolic computation
 evaluates to an infinite result. *)

@@ -20,10 +20,8 @@
  *
  *)
 
-open Num
 open SymbolicExpression
 open Optimization
-
 
 module ExpressionElement =
   struct
@@ -300,6 +298,13 @@ let real_array_store_size model =
       model.discrete_variables)
     model.parameters
 
+(* utilities *)
+
+let number_classify num =
+  if is_integer_num num then
+  ( if lt_num num zero_num then 12 else 14)
+  else 11
+
 let bufferize_float f model_info =
   let s = Printf.sprintf "%.16g" f in
   if not (String.contains s '.' || String.contains s 'e') then
@@ -330,7 +335,7 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
         DiscreteVariable _ | Logarithm _ | Parameter _ | PartialDerivative _ |
         Pre _ | Sign _ | Sine _ | Tangent _ | TimeVariable | Variable _ -> 13
       | Not _ -> 12
-      | Multiplication _ | Number (Ratio _) -> 11
+      | Multiplication _  -> 11
       | Addition _ -> 10
       | Greater _ -> 8
       | GreaterEqual _ -> 8
@@ -340,9 +345,12 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
       | If _ -> 1
       | Integer i when i < 0l -> 12
       | Integer _ -> 14
-      | Number num when lt_num num (Int 0) -> 12
+      (*  | Number (Ratio _) -> 11
+      | Number num when lt_num num zero_num -> 12
       | Number (Int _) | Number (Big_int _) -> 14
-      | RationalPower (_, num) when eq_num num (Int (-1)) -> 11
+      *)
+      | Number num -> number_classify num
+      | RationalPower (_, num) when equal_num num minus_one_num -> 11
       | RationalPower _ -> 13
   in
   let rec bufferize_expression_under prec expr =
@@ -365,7 +373,7 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
         Printf.bprintf model_info.code_buffer "%c" (if b then '1' else '0')
     | Constant s -> Printf.bprintf model_info.code_buffer "%s" s
     | Cosine expr' -> bufferize_unary_function expr "cos" expr'
-    | Derivative (expr', num') when num' = Num.Int 1 ->
+    | Derivative (expr', num') when num' = one_num ->
         begin match nature expr' with
           | Variable i ->
               let j = model_info.final_index_of_variables.(i) in
@@ -524,13 +532,13 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
           (fun expr ->
             has_multiple_occurrences expr model_info ||
             match nature expr with
-              | Number num when lt_num num (Int 0) -> false
+              | Number num when lt_num num zero_num -> false
               | Multiplication exprs ->
                   begin
                     let not_reciprocals =
                       List.filter
                         (fun expr -> match nature expr with
-                          | RationalPower (_, num) when lt_num num (Int 0) ->
+                          | RationalPower (_, num) when lt_num num zero_num ->
                               false
                           | _ -> true)
                         exprs
@@ -538,7 +546,7 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
                       | [] -> true
                       | expr' :: _ ->
                           begin match nature expr' with
-                            | Number num when lt_num num (Int 0) -> false
+                            | Number num when lt_num num zero_num -> false
                             | _ -> true
                           end
                   end
@@ -562,7 +570,7 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
         List.fold_left
           (fun (exprs, exprs') expr -> match nature expr with
             | BlackBox ("noEvent", _) -> assert false
-            | RationalPower (expr'', num) when eq_num num (Int (-1)) &&
+            | RationalPower (expr'', num) when equal_num num minus_one_num &&
               not (has_multiple_occurrences expr model_info) ->
                 exprs, (expr'' :: exprs')
             | _ -> (expr :: exprs), exprs')
@@ -573,7 +581,7 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
         | [] -> Printf.bprintf model_info.code_buffer "1.0"
         | expr' :: exprs' ->
             begin match nature expr' with
-              | Number (Int -1) ->
+              | Number num when equal_num num minus_one_num ->
                   Printf.bprintf model_info.code_buffer "-";
                   begin match exprs' with
                     | [] -> Printf.bprintf model_info.code_buffer "1.0"
@@ -609,7 +617,7 @@ let bufferize_rhs model_info tabs modes_on lhs expr =
       | Not_found -> assert false
   and bufferize_rational_power expr expr' num =
     let bufferize_rational_power' () =
-      if eq_num num (Int (-1)) then begin
+      if equal_num num minus_one_num then begin
         Printf.bprintf model_info.code_buffer "1.0/";
         bufferize_expression_under (precedence expr + 1) expr'
         (* add one to the precedence to ensure parentheses to be correctly
@@ -797,7 +805,7 @@ in
                       let dfdxd =
                         symbolic_partial_derivative_with
                           dx
-                          (create_derivative (create_variable k) (Num.Int 1))
+                          (create_derivative (create_variable k) one_num)
                           equation.expression
                       in
                       symbolic_add  (symbolic_mult (alpha) dfdx) (symbolic_mult beta dfdxd)
@@ -856,7 +864,7 @@ in
                          if equation.solved then
                            symbolic_partial_derivative_with
                            dx
-                          (create_derivative (create_variable l) (Num.Int 1))
+                          (create_derivative (create_variable l) one_num)
                            equation.expression
                          else if k = l then one
                          else zero;

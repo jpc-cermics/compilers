@@ -95,7 +95,7 @@ cmx: $(SRC_ML:.ml=.cmx)
 
 # be sure that cmi are sequential 
 
-CAML_INCLUDES= -I src 
+CAML_INCLUDES= -I src -I +num
 
 # Generic clean up
 EXT_TO_CLEAN=.cm* .o .a .annot .output .obj .lib
