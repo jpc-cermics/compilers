@@ -24,40 +24,28 @@
 to perform the symbolic manipulations involved in the transformation of Modelica
 models to simulation code. *)
 
+open Num
+
+val zero_num: num
+val minus_one_num: num
+val one_num: num
+val equal_num: num -> num -> bool
+val float_of_num: num -> float
+val is_integer_num: num -> bool
+val lt_num: num -> num -> bool
+val int_of_num: num -> int
+val string_of_num: num -> string
+val power_num: num -> num -> num
+val div_num: num -> num -> num
+val mult_num: num -> num -> num
+val minus_num: num -> num
+val num_of_string: string -> num
+val num_of_int: int -> num
+
 exception Infinite_result of string
-
-val num_of_int : int -> Q.t
-val int_of_num : Q.t -> int
-val float_of_num : Q.t -> float
-val mult_num : Q.t -> Q.t -> Q.t
-val div_num : Q.t -> Q.t -> Q.t
-val add_num : Q.t -> Q.t -> Q.t
-val sign_num : Q.t -> int
-val string_of_num : Q.t -> string
-val gt_num : Q.t -> Q.t -> bool
-val ge_num : Q.t -> Q.t -> bool
-val lt_num : Q.t -> Q.t -> bool
-val minus_num : Q.t -> Q.t
-val num_of_string : string -> Q.t
-val zero_num : Q.t
-val one_num : Q.t
-val two_num : Q.t
-val minus_one_num : Q.t
-val eq_num : Q.t -> Q.t -> bool
-val equal_num : Q.t -> Q.t -> bool
-val floor_num : Q.t -> Q.t
-val is_integer_num : Q.t -> bool
-val succ_num : Q.t -> Q.t
-val pred_num : Q.t -> Q.t
-val power_num : Q.t -> Q.t -> Q.t
-val ratio_decompose : Q.t -> Q.t * Q.t
-val mod_num : Q.t -> Q.t -> Q.t
-
 (** [Infinite_result] is raised when the result of symbolic computation
 evaluates to an infinite result. *)
 
-type num = Q.t
-         
 type t
 (** The type of the objects manipulated as symbolic expressions. *)
 

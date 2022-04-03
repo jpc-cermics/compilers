@@ -72,7 +72,8 @@ SRC_MLI=\
 SRC_MLI_GENERATED_FILES=\
 	src/parser.mli \
 
-CAML_BYT_LIBS=nums.cma
+#CAML_BYT_LIBS=nums.cma
+CAML_BYT_LIBS=zarith.cma
 
 all:  $(SRC_ML_GENERATED_FILES) cmi cmo cmx bin/modelicac
 
@@ -95,7 +96,9 @@ cmx: $(SRC_ML:.ml=.cmx)
 
 # be sure that cmi are sequential 
 
-CAML_INCLUDES= -I src -I +num
+
+CAML_INCLUDES= -I src -I +zarith
+# CAML_INCLUDES= -I src -I +num
 
 # Generic clean up
 EXT_TO_CLEAN=.cm* .o .a .annot .output .obj .lib
