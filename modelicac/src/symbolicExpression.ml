@@ -20,75 +20,36 @@
  *
  *)
 
-(* open Num;; *)
-   
-exception Infinite_result of string
+open Num;;
 
-(* emulates Num functions with Zarith *)
+let zero_num = Int 0
+let one_num = Int 1
+let two_num = Int 2
+let minus_one_num = Int (-1)
+let equal_num num num' = eq_num num num'
+let float_of_num num = Num.float_of_num num 
+let is_integer_num num = Num.is_integer_num num
+let lt_num num num' = Num.lt_num num num'
+let int_of_num num  = Num.int_of_num num 
+let string_of_num num = Num.string_of_num num
+let power_num num num' = Num.power_num num num'
+let num_of_int n = Num.num_of_int n
 
-let num_of_int i = Q.of_int i
+let div_num  num  num'  = Num.div_num num  num'
+let mult_num num  num' = Num.mult_num num  num'
+let minus_num num = Num.minus_num num
+let num_of_string s = Num.num_of_string s
 
-let int_of_num num = Q.to_int num
-
-let float_of_num num = Q.to_float num
-
-let mult_num num num' = Q.mul num num'
-
-let div_num num num' = Q.div num num'
-
-let add_num num num' = Q.add num num'
-
-let sign_num num = Q.sign num
-
-let string_of_num num = Q.to_string num 
-
-let gt_num num num' = Q.gt  num num'
-
-let ge_num num num' = Q.geq  num num'
-
-let lt_num num num' = Q.lt  num num'
-
-let minus_num num =  Q.neg num 
-
-
-let num_of_string s=  Q.of_string s 
-
-let zero_num = Q.zero 
-let one_num = Q.one 
-let two_num = num_of_int 2
-let minus_one_num = Q.minus_one
-
-let eq_num num num' = Q.equal num num'
-let equal_num num num' = Q.equal num num'
-
-let floor_num num =  Q.of_bigint (Q.to_bigint num)
-
-let is_integer_num num = eq_num (floor_num num) num 
-
-let succ_num num = Q.add num Q.one
-  
-let pred_num num = Q.add num Q.minus_one
-
-let power_num num num' = 
-  let num = Q.num num
-  and den = Q.den num
-  and exp = (Q.to_int num') in 
-  if Q.lt num' zero_num then
-    Q.make (Z.pow den (-exp)) (Z.pow num (-exp))  
-  else
-    Q.make (Z.pow num exp) (Z.pow den exp)
 
 let ratio_decompose num =
-   let numerator = Q.of_bigint (Q.num num)
-   and denominator = Q.of_bigint (Q.den num) in
+   let ratio = ratio_of_num num in 
+   let numerator = num_of_big_int (Ratio.numerator_ratio ratio)
+   and denominator = num_of_big_int (Ratio.denominator_ratio ratio) in
    (numerator, denominator)
-    
-let mod_num num num' =
-  let a = Q.to_bigint (div_num num num') in
-  Q.sub num (Q.mul (Q.of_bigint a) num')
 
-type num = Q.t
-  
+exception Infinite_result of string
+
+
 (* Type definitions *)
 
 type t =
@@ -734,6 +695,7 @@ let create_timeVariable () = time
 
 let create_variable i = NodeSet.find_or_add i variableNodeSet
 
+
 (* Reductions *)
 
 let rec apply_if_possible create op node nodes =
@@ -1361,7 +1323,7 @@ and output out_channel node =
     | Multiplication nodes' ->
       let not_reciprocals, reciprocals = List.fold_left
         (fun (nodes, nodes') node -> match node.nature with
-	  (* | Number (Ratio _ as num) ->
+          (* | Number (Ratio _ as num) ->
             let ratio = ratio_of_num num in
             let numerator = num_of_big_int (Ratio.numerator_ratio ratio)
             and denominator = num_of_big_int (Ratio.denominator_ratio ratio) in
@@ -1370,9 +1332,9 @@ and output out_channel node =
             else
               (create_number numerator :: nodes),
               (create_number denominator :: nodes')
-          *)
+           *)
           | Number num ->
-          if is_integer_num num then (node :: nodes), nodes'
+	    if is_integer_num num then (node :: nodes), nodes'
 	    else
 	      let (numerator, denominator ) = ratio_decompose num in 
 	      if eq_num numerator one_num then
@@ -1381,8 +1343,7 @@ and output out_channel node =
                  (create_number numerator :: nodes),
                  (create_number denominator :: nodes')
 
-	    
-	  | RationalPower (node'', num) when eq_num num minus_one_num  ->
+          | RationalPower (node'', num) when eq_num num minus_one_num ->
               nodes, (node'' :: nodes')
           | RationalPower (node'', num) when lt_num num zero_num ->
               nodes, (create_rationalPower node'' (minus_num num) :: nodes')
