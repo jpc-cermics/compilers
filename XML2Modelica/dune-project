@@ -1,7 +1,7 @@
 (lang dune 2.0)
 
 (package
- (name xML2Modelica)
+ (name XML2Modelica)
  ;;(depends num unix)
  )
 
