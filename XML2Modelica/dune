@@ -1,7 +1,7 @@
 (dirs :standard \ wip)
 
 (executable
- (name xML2Modelica)
+ (name XML2Modelica)
  ;; (flags :standard -w -3)
  ;; (libraries unix num)
  ;;  (modules_without_implementation)
