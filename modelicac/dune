@@ -1,0 +1,18 @@
+
+(dirs :standard \ wip)
+
+(executable
+ (name modelicac)
+ (flags :standard -w -3)
+ (libraries unix num)
+ ;;  (modules_without_implementation)
+ ;;  (link_flags -cclib -lz)
+)
+
+(include_subdirs unqualified)
+
+(rule
+ (alias  runtest)
+ (action (run ./simport.exe --version)))
+ 
+

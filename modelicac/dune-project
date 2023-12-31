@@ -1,0 +1,8 @@
+(lang dune 2.0)
+
+(package
+ (name modelicac)
+ ;;(depends num unix)
+ )
+
+;;(generate_opam_files)
