@@ -1,0 +1,8 @@
+(lang dune 2.0)
+
+(package
+ (name xML2Modelica)
+ ;;(depends num unix)
+ )
+
+;;(generate_opam_files)
