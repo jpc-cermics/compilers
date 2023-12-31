@@ -1,0 +1,13 @@
+
+(executable
+ (name translator)
+ ;; (flags :standard -w -3)
+ (libraries unix num)
+ ;;  (modules_without_implementation)
+ ;;  (link_flags -cclib -lz)
+)
+
+(include_subdirs unqualified)
+
+ 
+
