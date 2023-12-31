@@ -188,39 +188,39 @@ and expression_information =
 
 and expression_desc =
   | BinaryOperation of binary_operator_kind * expression * expression
-  | DynamicIdentifier of int (** number of nested classes to skip *) *
-      string (** name to be searched for at instanciation time *)
+  | DynamicIdentifier of int (* number of nested classes to skip *) *
+      string (* name to be searched for at instanciation time *)
   | False
   | FieldAccess of expression * string
-  | FunctionArgument of int (** the position of the argument in the call *)
-  | FunctionCall of expression (** function *) *
-      expression list (** arguments *) *
-      expression (** the expression involving the function call *)
-      (** creation of a dynamic function context *)
+  | FunctionArgument of int (* the position of the argument in the call *)
+  | FunctionCall of expression (* function *) *
+      expression list (* arguments *) *
+      expression (* the expression involving the function call *)
+      (* creation of a dynamic function context *)
   | FunctionInvocation of expression list
-      (** invocation of the current function in context *)
-  | If of (expression (** condition *) * expression) list *
-      expression (** default *)
+      (* invocation of the current function in context *)
+  | If of (expression (* condition *) * expression) list *
+      expression (* default *)
   | IndexedAccess of expression * expression list (* subscripts *)
   | Integer of int32
-  | LocalIdentifier of int (** number of nested classes to skip *) *
-      string (** key in the dictionary of the defining class *)
-  | LoopVariable of int (** number of nested for loops to skip *)
+  | LocalIdentifier of int (* number of nested classes to skip *) *
+      string (* key in the dictionary of the defining class *)
+  | LoopVariable of int (* number of nested for loops to skip *)
   | NoEvent of expression
-  | PredefinedIdentifier of string (** predefined identifier *)
+  | PredefinedIdentifier of string (* predefined identifier *)
   | Range of expression * expression * expression
   | Real of float
   | String of string
-  | ToplevelIdentifier of string (** key in the toplevel dictionary *)
+  | ToplevelIdentifier of string (* key in the toplevel dictionary *)
   | True
   | Tuple of expression list
   | UnaryOperation of unary_operator_kind * expression
   | Vector of expression list
-  | VectorReduction of expression list (** nested ranges *) * expression
+  | VectorReduction of expression list (* nested ranges *) * expression
   | Coercion of coercion_kind * expression
 
 and coercion_kind =
-  | RealOfInteger (** Implicit conversion of Integer to Real *)
+  | RealOfInteger (* Implicit conversion of Integer to Real *)
 
 and unary_operator_kind =
   | Not
