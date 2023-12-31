@@ -46,11 +46,11 @@ module type CODEGENERATOR =
 module type S =
   sig
     val sccs_id: string
-    (** Description of the executable *)
+    (* Description of the executable *)
     val version: string
-    (** The version of the compiler instance. *)
+    (* The version of the compiler instance. *)
     val run: unit -> unit
-    (** [run ()] invokes the compiler's unique entry point. *)
+    (* [run ()] invokes the compiler's unique entry point. *)
   end
 
 module Make:
